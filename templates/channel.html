@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            if(!localStorage.getItem('ChannelIn')){
+                document.addEventListener('DOMContentLoaded', () => {
+                    document.querySelector('#current').innerHTML += localStorage.getItem('user');
+                    const r = new XMLHttpRequest();
+                    r.open('GET', '/ChannelList');  
+                    r.onload = () => {
+                        const data = JSON.parse(r.responseText);
+                        const cl = data.newList;
+                        for(let i=0; i<cl.length; i++){
+                            const li = document.createElement('li');
+                            li.innerHTML = `<a class="ch" href="{{url_for('chat')}}"> ${cl[i]} </a> `;
+                            document.querySelector('#ChannelList').append(li);
+                        }
+                    
+                        const links = document.querySelectorAll('.ch');
+                            for (let i = 0; i < links.length; i++) {
+                                links[i].addEventListener('click', (event) => {
+                                    // Extract innerHTML of clicked anchor tag
+                                    const channelI = event.target.innerHTML;
+
+                                    // Store channelName in localStorage
+                                    if (channelI != 'logout'){
+                                        localStorage.setItem('ChannelIn', channelI);
+                                    }
+                            });
+                        }
+                    }
+
+                   /*     const links = document.getElementsByTagName('a');
+                        for (let i = 0; i < links.length; i++) {
+                            links[i].addEventListener('click', (event) => {
+                                    // Extract innerHTML of clicked anchor tag
+                                const channelI = event.target.innerHTML;
+
+                                    // Store channelName in localStorage
+                                localStorage.setItem('ChannelIn', channelI);
+                            });  
+                        }              
+                    }*/
+                    r.send()      
+
+                    document.querySelector('#logout').addEventListener('click', (event) =>{
+                        localStorage.removeItem('user');
+                        localStorage.removeItem('ChannelIn');
+                    })  
+
+                    //const myChannels = JSON.parse(localStorage.getItem('myChannels')) || [];
+
+
+                    // By default, submit button is disabled    
+                    document.querySelector('#submit').disabled = true;
+
+                    // Enable button only if there is text in the input field
+                    document.querySelector('#Channel').onkeyup = () => {
+                        if (document.querySelector('#Channel').value.length > 0)
+                            document.querySelector('#submit').disabled = false;
+                        else
+                            document.querySelector('#submit').disabled = true;
+                    };
+    
+                    document.querySelector('#Channels').onsubmit = () => {
+
+                        const channelNm = document.querySelector('#Channel').value;
+                        const request = new XMLHttpRequest();
+                        request.open('POST', '/ChannelList');
+
+                        request.onload = () => {
+                            const data = JSON.parse(request.responseText);
+                            const cl = data.newList;
+                            const li = document.createElement('li');
+                            li.innerHTML = `<a class="ch" href="{{url_for('chat')}}"> ${cl[cl.length-1]} </a> `;
+                            document.querySelector('#ChannelList').append(li);
+                            
+
+                            const links = document.querySelectorAll('.ch');
+                            for (let i = 0; i < links.length; i++) {
+                                links[i].addEventListener('click', (event) => {
+                                    // Extract innerHTML of clicked anchor tag
+                                    const channelI = event.target.innerHTML;
+
+                                    // Store channelName in localStorage
+
+                                    localStorage.setItem('ChannelIn', channelI);
+                                    
+                            });
+                        }
+                            
+
+                        }
+
+                        const data = new FormData();
+                        data.append('newChannel', channelNm);
+                        request.send(data);
+
+                        document.querySelector('#Channel').value = '';
+                        document.querySelector('#submit').disabled = true;
+
+                        // Stop form from submitting
+                        return false;
+                    };
+                    
+                }
+                );
+
+            }
+
+            else{
+                window.location.replace('/chat');
+            }
+
+        </script>
+        <title>Channel</title>
+    </head>
+    <body>
+        <h1 id="current">Current User: </h1> 
+        <a id="logout" href="{{url_for('index')}}">logout</a>
+        <form id="Channels"> 
+            <input id="Channel" type="text" name="Channel">
+            <input id="submit" type="submit">
+        </form>
+        <h2>Channel List:</h2>
+        
+        <ul id="ChannelList"> 
+       
+        </ul>
+
+    </body>
+</html>

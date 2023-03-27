@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </head>
+    <body>
+        <h1 id="an">You are in </h1>
+        <a id="logout" href="{{url_for('index')}}">logout</a>
+        <ul id="ChannelList"></ul>
+
+  
+            <input id="t" type="text" name="Type">
+            <button id="submitid"  >Submit</button>
+
+
+        <ul id="AllTexts">
+
+        </ul>
+
+        <a id='back' href="{{url_for('channels')}}">click here to go back to channel list</a>
+    
+    </body>
+</html>

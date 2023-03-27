@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+
+            if (!localStorage.getItem('user')){
+
+                document.addEventListener('DOMContentLoaded', () => {
+
+                    document.querySelector('#submit').disabled = true;
+
+                    document.querySelector('#username').onkeyup = () => {
+                        if (document.querySelector('#username').value.length > 0)
+                            document.querySelector('#submit').disabled = false;
+                        else
+                            document.querySelector('#submit').disabled = true;
+                    };   
+
+                    document.querySelector('#user').onsubmit = () => {
+
+                        let user = document.querySelector('#username').value;
+                        localStorage.setItem('user', user);
+                        
+                        document.querySelector('#username').value = '';
+                        document.querySelector('#submit').disabled = true;                    
+                    };            
+                });
+            }
+            else{
+                console.log('3')
+                var cl = '{{cl}}';
+                console.log(cl)
+                if(cl.length == 0){
+                    console.log('7')
+                    localStorage.removeItem('ChannelIn');
+                }
+                window.location.replace('/channels')
+            }
+
+        </script>
+        <title>Registration</title>
+    </head>
+    <body>
+
+        <h1>User Registration</h1>
+        <form id="user" action="{{url_for('channels')}}" method="post">
+            <input id="username" type="text" name="username">
+            <input id="submit" type="submit">
+        </form>
+
+    </body>
+</html>
+
