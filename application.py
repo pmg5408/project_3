@@ -47,9 +47,9 @@ def chat(data):
     ChannelIn = data["channel"]
 
     if(ChannelIn not in d):
-        d.update({ChannelIn: [{"text": data['text'], 'user': data['user']}]})
+        d.update({ChannelIn: [{"text": data['text'], 'user': data['user'], 'date':data['date']}]})
     else:
-        d[ChannelIn].append({"text": data['text'], 'user': data['user']})
+        d[ChannelIn].append({"text": data['text'], 'user': data['user'], 'date':data['date']})
 
     print(d, 'hello from server')
     emit('DisplayText', {'dict': d[ChannelIn]}, broadcast=True)

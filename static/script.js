@@ -31,8 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
             for(let i=0; i < data.ChatEntries.length; i++){
                 text = data.ChatEntries[i].text; 
                 user = data.ChatEntries[i].user;
+                d = data.ChatEntries[i].date;
                 const li = document.createElement('li');
-                li.innerHTML = `text: ${text} user: ${user}`;
+                li.innerHTML = `text: ${text} user: ${user} date: ${d}`;
                 document.querySelector('#AllTexts').append(li);                                  
             }   
         }          
@@ -55,7 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('hello');                    
         document.querySelector('#submitid').onclick = () => {
             const text = document.querySelector('#t').value;
-            socket.emit('ChatEntry', {'text': text, 'user': localStorage.getItem('user'), 'channel': localStorage.getItem('ChannelIn')});
+            var dt = new Date();
+            document.querySelector('#t').value = ''
+
+            socket.emit('ChatEntry', {'text': text, 'user': localStorage.getItem('user'), 'channel': localStorage.getItem('ChannelIn'), 'date': dt});
         };
 
     });
@@ -68,12 +72,15 @@ document.addEventListener('DOMContentLoaded', () => {
         l = data.dict.length
         text = data.dict[l - 1].text; 
         user = data.dict[l - 1].user;
+        d = data.dict[l - 1].date;
         const li = document.createElement('li');
-        li.innerHTML = `text: ${text} user: ${user}`;
+        li.innerHTML = `text: ${text} user: ${user} timestamp: ${d}`;
         document.querySelector('#AllTexts').append(li);                                  
         
 
     })
+
+
 
     
 }
